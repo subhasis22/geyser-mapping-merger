@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeyserMC Model Mapping Merger</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <div class="loading-text">Processing...</div>
+    </div>
+    
+    <div class="messages" id="messages"></div>
+    
+    <div class="container">
+        <header>
+            <h1>GeyserMC Model Mapping Merger</h1>
+            <p class="subtitle">Merge and sort GeyserMC custom model data mappings with advanced analysis</p>
+        </header>
+        
+        <section class="upload-section">
+            <div class="upload-box">
+                <div class="upload-title">
+                    <span class="upload-number">1</span>
+                    Upload First Mapping JSON
+                </div>
+                <div class="file-upload-area" id="dropZone1" data-zone="1">
+                    <div class="upload-icon">📄</div>
+                    <div class="upload-text">Drag & drop or click to select</div>
+                    <div class="upload-hint">Supports .json files</div>
+                    <div class="file-info">
+                        <div class="file-name" id="fileName1">No file selected</div>
+                        <div class="file-size" id="fileSize1"></div>
+                    </div>
+                    <input type="file" id="fileInput1" class="file-input" accept=".json">
+                </div>
+                <div class="upload-status" id="uploadStatus1"></div>
+            </div>
+            
+            <div class="upload-box">
+                <div class="upload-title">
+                    <span class="upload-number">2</span>
+                    Upload Second Mapping JSON
+                </div>
+                <div class="file-upload-area" id="dropZone2" data-zone="2">
+                    <div class="upload-icon">📄</div>
+                    <div class="upload-text">Drag & drop or click to select</div>
+                    <div class="upload-hint">Supports .json files</div>
+                    <div class="file-info">
+                        <div class="file-name" id="fileName2">No file selected</div>
+                        <div class="file-size" id="fileSize2"></div>
+                    </div>
+                    <input type="file" id="fileInput2" class="file-input" accept=".json">
+                </div>
+                <div class="upload-status" id="uploadStatus2"></div>
+            </div>
+        </section>
+        
+        <section class="controls-section">
+            <h2 class="controls-title">Merge & Sort</h2>
+            <div class="controls-grid">
+                <button class="btn btn-primary" id="mergeBtn">
+                    <span>🔄</span> Merge JSON Files
+                </button>
+                <button class="btn btn-secondary" id="sortBtn">
+                    <span>🔠</span> Sort A-Z
+                </button>
+                <button class="btn btn-success" id="analyzeBtn">
+                    <span>📊</span> Analyze Names
+                </button>
+                <button class="btn btn-danger" id="clearBtn">
+                    <span>🗑️</span> Clear All
+                </button>
+                <button class="btn btn-primary" id="downloadBtn" disabled>
+                    <span>💾</span> Download Merged
+                </button>
+            </div>
+        </section>
+        
+        <section class="preview-section" id="previewSection" style="display: none;">
+            <div class="preview-header">
+                <h2 class="preview-title">Preview (first items only)</h2>
+                <div class="badge" id="sortBadge" style="display: none;">A-Z Sorted</div>
+            </div>
+            <div class="json-preview" id="jsonPreview">
+                // Merged JSON will appear here
+            </div>
+        </section>
+        
+        <section class="stats-section" id="statsSection" style="display: none;">
+            <h2 class="stats-title">Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalItems">0</div>
+                    <div class="stat-label">Total Items</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="uniqueTypes">0</div>
+                    <div class="stat-label">Unique Types</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="longestName">0</div>
+                    <div class="stat-label">Longest Name</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="avgLength">0</div>
+                    <div class="stat-label">Avg Name Length</div>
+                </div>
+            </div>
+            
+            <div class="name-analysis" id="nameAnalysis" style="display: none;">
+                <h3 style="color: var(--accent-purple); margin-bottom: 15px;">Item Name Length Analysis</h3>
+                <div class="name-list" id="nameList">
+                    <!-- Name items will be inserted here -->
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
