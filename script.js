@@ -13,15 +13,11 @@ const fileSize2 = document.getElementById('fileSize2');
 const uploadStatus1 = document.getElementById('uploadStatus1');
 const uploadStatus2 = document.getElementById('uploadStatus2');
 const mergeBtn = document.getElementById('mergeBtn');
-const sortBtn = document.getElementById('sortBtn');
-const analyzeBtn = document.getElementById('analyzeBtn');
 const clearBtn = document.getElementById('clearBtn');
 const downloadBtn = document.getElementById('downloadBtn');
 const previewSection = document.getElementById('previewSection');
 const jsonPreview = document.getElementById('jsonPreview');
 const statsSection = document.getElementById('statsSection');
-const nameAnalysis = document.getElementById('nameAnalysis');
-const nameList = document.getElementById('nameList');
 const sortBadge = document.getElementById('sortBadge');
 const loadingOverlay = document.getElementById('loadingOverlay');
 const messages = document.getElementById('messages');
@@ -52,8 +48,6 @@ function setupEventListeners() {
     
     // Button events
     mergeBtn.addEventListener('click', mergeFiles);
-    sortBtn.addEventListener('click', sortAlphabetically);
-    analyzeBtn.addEventListener('click', analyzeNames);
     clearBtn.addEventListener('click', clearAll);
     downloadBtn.addEventListener('click', downloadJson);
 }
@@ -277,14 +271,6 @@ function mergeFiles() {
         downloadBtn.disabled = false;
         
         showMessage('✅ JSON files merged successfully!', 'success');
-        
-        // Auto-show analysis for large files
-        if (Object.keys(mergedJson.items || {}).length > 20) {
-            setTimeout(() => {
-                analyzeNames();
-                showMessage('📊 Name analysis completed automatically', 'success');
-            }, 500);
-        }
     }).catch(error => {
         showMessage(`❌ Error: ${error.message}`, 'error');
     }).finally(() => {
@@ -440,54 +426,6 @@ function updateStats() {
     longestNameEl.title = longestNameItem || 'No names found';
 }
 
-function analyzeNames() {
-    if (!mergedJson || !mergedJson.items) {
-        showMessage('No JSON data to analyze', 'error');
-        return;
-    }
-    
-    const nameLengths = [];
-    
-    for (const itemType in mergedJson.items) {
-        if (Array.isArray(mergedJson.items[itemType])) {
-            mergedJson.items[itemType].forEach(item => {
-                if (item.name) {
-                    nameLengths.push({
-                        name: item.name,
-                        length: item.name.length,
-                        type: itemType
-                    });
-                }
-            });
-        }
-    }
-    
-    if (nameLengths.length === 0) {
-        showMessage('No item names found to analyze', 'warning');
-        return;
-    }
-    
-    nameLengths.sort((a, b) => b.length - a.length);
-    
-    nameList.innerHTML = '';
-    const topNames = nameLengths.slice(0, 25);
-    topNames.forEach((item, index) => {
-        const nameItem = document.createElement('div');
-        nameItem.className = 'name-item';
-        nameItem.innerHTML = `
-            <div class="name-text" title="${item.name} (${item.type})">
-                <span class="name-rank">${index + 1}.</span>
-                ${truncateText(item.name, 35)}
-            </div>
-            <div class="name-length">${item.length} chars</div>
-        `;
-        nameList.appendChild(nameItem);
-    });
-    
-    nameAnalysis.style.display = 'block';
-    showMessage(`📊 Analyzed ${nameLengths.length} item names`, 'success');
-}
-
 function downloadJson() {
     if (!mergedJson) {
         showMessage('No JSON data to download', 'error');
@@ -530,8 +468,6 @@ function clearAll() {
     uploadStatus2.textContent = '';
     
     jsonPreview.innerHTML = '// Merged JSON will appear here';
-    nameList.innerHTML = '';
-    nameAnalysis.style.display = 'none';
     previewSection.style.display = 'none';
     statsSection.style.display = 'none';
     sortBadge.style.display = 'none';
@@ -542,9 +478,4 @@ function clearAll() {
     isSorted = false;
     
     showMessage('🗑️ All data cleared', 'success');
-}
-
-function truncateText(text, maxLength) {
-    if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength - 3) + '...';
 }
